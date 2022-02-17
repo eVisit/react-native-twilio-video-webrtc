@@ -230,7 +230,11 @@ export default class extends Component {
    * @param  {Boolean} enableNetworkQualityReporting Report network quality of participants
    */
   connect ({ roomName, accessToken, enableVideo = true, encodingParameters = null, enableNetworkQualityReporting = false, dominantSpeakerEnabled = false }) {
-    TWVideoModule.connect(accessToken, roomName, enableVideo, encodingParameters, enableNetworkQualityReporting, dominantSpeakerEnabled)
+    if(TWVideoModule.supportsDominantSpeaker) {
+      TWVideoModule.connect(accessToken, roomName, enableVideo, encodingParameters, enableNetworkQualityReporting, dominantSpeakerEnabled)
+    } else {
+      TWVideoModule.connect(accessToken, roomName, enableVideo, encodingParameters, enableNetworkQualityReporting)
+    }
   }
 
   /**
@@ -410,13 +414,18 @@ export default class extends Component {
         if (this.props.onNetworkQualityLevelsChanged) {
           this.props.onNetworkQualityLevelsChanged(data)
         }
-      }),
-      this._eventEmitter.addListener('onDominantSpeakerDidChange', data => {
-        if (this.props.onDominantSpeakerDidChange) {
-          this.props.onDominantSpeakerDidChange(data)
-        }
       })
     ]
+
+    if(TwilioVideoModule.supportsDominantSpeaker) {
+      this._subscriptions.push(
+        this._eventEmitter.addListener('onDominantSpeakerDidChange', data => {
+          if (this.props.onDominantSpeakerDidChange) {
+            this.props.onDominantSpeakerDidChange(data)
+          }
+        })
+      )
+    }
   }
 
   render () {

@@ -150,6 +150,10 @@ RCT_EXPORT_MODULE();
   }
 }
 
+RCT_EXPORT_METHOD(supportsDominantSpeaker:(BOOL)value) {
+    return true;
+}
+
 RCT_EXPORT_METHOD(changeListenerStatus:(BOOL)value) {
     self.listening = value;
 }
