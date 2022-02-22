@@ -417,7 +417,7 @@ export default class extends Component {
       })
     ]
 
-    if(TwilioVideoModule.supportsDominantSpeaker) {
+    if(TWVideoModule.supportsDominantSpeaker) {
       this._subscriptions.push(
         this._eventEmitter.addListener('onDominantSpeakerDidChange', data => {
           if (this.props.onDominantSpeakerDidChange) {
